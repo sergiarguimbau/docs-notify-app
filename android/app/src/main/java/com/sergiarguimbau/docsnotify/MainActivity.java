@@ -1,4 +1,4 @@
-package com.docsnotify;
+package com.sergiarguimbau.docsnotify;
 
 import com.facebook.react.ReactActivity;
 
