@@ -16,6 +16,8 @@
     "react": "17.0.2",
     "react-native": "0.66.0",
     "react-redux": "^7.2.5",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
     "redux-persist": "^6.0.0"
   },
   "devDependencies": {
