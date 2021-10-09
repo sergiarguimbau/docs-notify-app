@@ -12,8 +12,13 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.15.9",
     "react": "17.0.2",
-    "react-native": "0.66.0"
+    "react-native": "0.66.0",
+    "react-redux": "^7.2.5",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^6.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -34,6 +39,9 @@
   },
   "jest": {
     "preset": "react-native",
+    "setupFiles": [
+      "./jestSetupFile.js"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",

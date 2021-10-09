@@ -6,15 +6,23 @@ import {
   View,
   Text,
 } from 'react-native';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+
+import { store, persistor } from './src/redux/store';
 
 const App = () => {
   return (
-    <SafeAreaView style={styles.appContainer}>
-      <StatusBar barStyle='dark-content' />
-      <View style={styles.screenContainer}>
-        <Text>Docs Notify</Text>
-      </View>
-    </SafeAreaView>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <SafeAreaView style={styles.appContainer}>
+          <StatusBar barStyle='dark-content' />
+          <View style={styles.screenContainer}>
+            <Text>Docs Notify</Text>
+          </View>
+        </SafeAreaView>
+      </PersistGate>
+    </Provider>
   );
 };
 
