@@ -7,6 +7,9 @@ import {
   StatusBar,
 } from 'react-native';
 
+import { Toolbar } from '../../components';
+import { colors } from '../../styles';
+
 export type MainProps = {
   children?: React.ReactNode;
   appCounter?: number,
@@ -22,7 +25,8 @@ const MainView = (props: MainProps) => {
 
   return (
     <SafeAreaView style={styles.appContainer}>
-      <StatusBar barStyle='dark-content' />
+      <StatusBar barStyle='dark-content' backgroundColor={colors.primary} />
+      <Toolbar title={'Documents'} iconName={'bell-outline'} />
       <View style={styles.screenContainer}>
         <Text>{'App Count: ' + props.appCounter}</Text>
       </View>
@@ -32,11 +36,10 @@ const MainView = (props: MainProps) => {
 
 const styles = StyleSheet.create({
   appContainer: {
-    backgroundColor: '#F3F3F3',
     flex: 1,
   },
   screenContainer: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.backgroundLight,
     flex: 1,
     padding: 16,
   }
