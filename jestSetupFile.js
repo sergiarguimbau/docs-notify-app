@@ -15,3 +15,6 @@ jest.mock('redux-persist', () => {
       .mockImplementation((config, reducers) => reducers),
   };
 });
+
+// Vector Icons
+jest.mock('react-native-vector-icons/MaterialCommunityIcons', () => 'MaterialCommunityIcon');
