@@ -7,6 +7,7 @@ const colors = {
   // Texts
   textDark: '#000000',
   textLight: '#FFFFFF',
+  textGray: '#6B7380',
 
   // Backgrounds
   backgroundLight: '#F4F4F6',
