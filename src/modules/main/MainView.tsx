@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   View,
@@ -15,18 +15,11 @@ import { DocumentType } from '../../data/types'
 
 export type MainProps = {
   children?: React.ReactNode;
-  appCounter?: number,
   documentsData?: DocumentType[],
-  incrementAppCounter?: () => void;
   fetchDocumentsData?: () => void;
 };
 
 const MainView = (props: MainProps) => { 
-
-  useEffect(() => {
-    // Increment app counter for every cold app launch (just for testing)
-    props.incrementAppCounter?.();
-  }, []);
 
   return (
     <SafeAreaView style={styles.appContainer}>

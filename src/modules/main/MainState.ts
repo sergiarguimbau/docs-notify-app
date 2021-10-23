@@ -5,28 +5,19 @@ import { backendServer } from '../../data/global';
 
 // Initial state
 export type MainState = {
-  readonly appCounter: number;
   readonly documentsData: DocumentType[];
 };
 
 const initialState: MainState = {
-  appCounter: 0,
   documentsData: initialDocumentsData,
 };
 
 // Actions
-const INCREMENT_APP_COUNTER = 'MainState/INCREMENT_APP_COUNTER';
 const FETCH_DOCUMENTS_DATA_START = 'MainState/FETCH_DOCUMENTS_DATA_START';
 const FETCH_DOCUMENTS_DATA_SUCCESS = 'MainState/FETCH_DOCUMENTS_DATA_SUCCESS';
 const FETCH_DOCUMENTS_DATA_FAILED = 'MainState/FETCH_DOCUMENTS_DATA_FAILED';
 
 // Action creators
-export function incrementAppCounter(): AnyAction {
-  return {
-    type: INCREMENT_APP_COUNTER,
-  };
-}
-
 export function fetchDocumentsDataStart(): AnyAction {
   return {
     type: FETCH_DOCUMENTS_DATA_START,
@@ -81,10 +72,6 @@ const getResponseDocumentsAPI = async () => {
 // Reducer
 export default function MainReducer(state: MainState = initialState, action: AnyAction) {
   switch (action.type) {
-    case INCREMENT_APP_COUNTER:
-      return Object.assign({}, state, {
-        appCounter: state.appCounter + 1,
-      });
     case FETCH_DOCUMENTS_DATA_SUCCESS:
       return Object.assign({}, state, {
         documentsData: action.payload.documentsData,
