@@ -5,14 +5,17 @@ import {
   Text,
   StyleSheet,
   StatusBar,
+  ScrollView,
 } from 'react-native';
 
 import { Toolbar } from '../../components';
 import { colors } from '../../styles';
+import { DocumentType } from '../../data/types'
 
 export type MainProps = {
   children?: React.ReactNode;
   appCounter?: number,
+  documentsData?: DocumentType[],
   incrementAppCounter?: () => void;
 };
 
@@ -28,7 +31,9 @@ const MainView = (props: MainProps) => {
       <StatusBar barStyle='dark-content' backgroundColor={colors.primary} />
       <Toolbar title={'Documents'} iconName={'bell-outline'} />
       <View style={styles.screenContainer}>
-        <Text>{'App Count: ' + props.appCounter}</Text>
+        <ScrollView>
+          <Text>{JSON.stringify(props.documentsData, null, 2)}</Text>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );

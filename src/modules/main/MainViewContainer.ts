@@ -8,6 +8,7 @@ export default compose(
   connect(
     (state: {main: MainState}) => ({
       appCounter: state.main.appCounter,
+      documentsData: state.main.documentsData,
     }),
     dispatch => ({
       incrementAppCounter: () => dispatch(incrementAppCounter()),

@@ -1,12 +1,16 @@
 import { AnyAction } from 'redux'
+import { DocumentType } from '../../data/types';
+import { initialDocumentsData } from '../../data/initialData';
 
 // Initial state
 export type MainState = {
   readonly appCounter: number;
+  readonly documentsData: DocumentType[];
 };
 
 const initialState: MainState = {
   appCounter: 0,
+  documentsData: initialDocumentsData,
 };
 
 // Actions
