@@ -2,7 +2,7 @@ import 'react-native';
 import React from 'react';
 import App from '../App';
 import MainView from '../src/modules/main/MainView';
-import { Toolbar } from '../src/components';
+import { Toolbar, Card } from '../src/components';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
@@ -17,4 +17,8 @@ it('MainView renders correctly', () => {
 
 it('Toolbar component renders correctly', () => {
   renderer.create(<Toolbar title={'Test'}/>);
+});
+
+it('Card component renders correctly', () => {
+  renderer.create(<Card />);
 });
