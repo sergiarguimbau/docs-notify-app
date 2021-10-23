@@ -33,6 +33,11 @@ Or, if you prefer Android:
 yarn run:android
 ```
 
+Connect localhost from Android device:
+```
+adb reverse tcp:8080 tcp:8080
+```
+
 #### 3. Test project
 
 Run test suite once:
