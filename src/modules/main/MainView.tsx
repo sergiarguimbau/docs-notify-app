@@ -6,6 +6,7 @@ import {
   StyleSheet,
   StatusBar,
   ScrollView,
+  Button,
 } from 'react-native';
 
 import { Toolbar } from '../../components';
@@ -17,6 +18,7 @@ export type MainProps = {
   appCounter?: number,
   documentsData?: DocumentType[],
   incrementAppCounter?: () => void;
+  fetchDocumentsData?: () => void;
 };
 
 const MainView = (props: MainProps) => { 
@@ -32,6 +34,7 @@ const MainView = (props: MainProps) => {
       <Toolbar title={'Documents'} iconName={'bell-outline'} />
       <View style={styles.screenContainer}>
         <ScrollView>
+          <Button title={'Update'} onPress={() => props.fetchDocumentsData?.()} />
           <Text>{JSON.stringify(props.documentsData, null, 2)}</Text>
         </ScrollView>
       </View>
