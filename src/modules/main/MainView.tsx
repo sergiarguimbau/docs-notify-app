@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -21,6 +21,14 @@ export type MainProps = {
 };
 
 const MainView = (props: MainProps) => { 
+
+  const [isRefreshingDocuments, setIsRefreshingDocuments] = useState(false);
+
+  const onRefreshDocuments = async () => {
+    setIsRefreshingDocuments(true);
+    await props.fetchDocumentsData?.();
+    setIsRefreshingDocuments(false);
+  }
   
   const LIST_MARGIN = 16;
   const screenWidth = Dimensions.get('window').width - LIST_MARGIN * 2;
@@ -46,6 +54,8 @@ const MainView = (props: MainProps) => {
           data={props.documentsData}
           numColumns={2}
           renderItem={renderDocumentItem}
+          onRefresh={() => onRefreshDocuments()}
+          refreshing={isRefreshingDocuments}
           keyExtractor={item => `${item.ID}`}
           columnWrapperStyle={{justifyContent: 'space-between'}}
           contentContainerStyle={{padding: LIST_MARGIN}}
