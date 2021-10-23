@@ -1,34 +1,35 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   SafeAreaView,
   View,
   Text,
   StyleSheet,
   StatusBar,
+  ScrollView,
+  Button,
 } from 'react-native';
 
 import { Toolbar } from '../../components';
 import { colors } from '../../styles';
+import { DocumentType } from '../../data/types'
 
 export type MainProps = {
   children?: React.ReactNode;
-  appCounter?: number,
-  incrementAppCounter?: () => void;
+  documentsData?: DocumentType[],
+  fetchDocumentsData?: () => void;
 };
 
 const MainView = (props: MainProps) => { 
-
-  useEffect(() => {
-    // Increment app counter for every cold app launch (just for testing)
-    props.incrementAppCounter?.();
-  }, []);
 
   return (
     <SafeAreaView style={styles.appContainer}>
       <StatusBar barStyle='dark-content' backgroundColor={colors.primary} />
       <Toolbar title={'Documents'} iconName={'bell-outline'} />
       <View style={styles.screenContainer}>
-        <Text>{'App Count: ' + props.appCounter}</Text>
+        <ScrollView>
+          <Button title={'Update'} onPress={() => props.fetchDocumentsData?.()} />
+          <Text>{JSON.stringify(props.documentsData, null, 2)}</Text>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
