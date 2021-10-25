@@ -13,3 +13,10 @@ export type DocumentType = {
   UpdatedAt: string,
 };
 
+export type DocumentInfoType = {
+  documentTitle: string,
+  documentVersion: string,
+  documentContributors: string,
+  documentAttachments: string,
+};
+
