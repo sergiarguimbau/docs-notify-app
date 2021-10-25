@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import { Toolbar, Card } from '../../components';
+import { Toolbar, Card, TextList } from '../../components';
 import { colors } from '../../styles';
 import { DocumentType } from '../../data/types'
 
@@ -54,46 +54,20 @@ const MainView = (props: MainProps) => {
       </View>
       {(listMode === LIST_MODE.LIST) && (
         <View style={styles.documentItemInfoListContainer}>
-          <View style={styles.flex}>
-            <View style={styles.row}>
-              <MaterialCommunityIcon
-                name={'account-group-outline'}
-                color={colors.darkGray}
-                size={20}
-              />
-              <View style={{paddingStart: 8}}>
-                <Text style={styles.documentItemTitleText}>{'Contributors'}</Text>
-              </View>
-            </View>
-            <FlatList
-              listKey={JSON.stringify(item.Contributors)}
-              data={item.Contributors}
-              renderItem={({item}) => <Text style={styles.documentItemVersionText}>{item.Name}</Text>}
-              keyExtractor={item => `${item.ID}`}
-              ItemSeparatorComponent={() => <View style={{height: 8}}/>}
-              ListHeaderComponent={() => <View style={{height: 8}}/>}
-            />
-          </View>
-          <View style={styles.flex}>
-            <View style={styles.row}>
-              <MaterialCommunityIcon
-                name={'link-variant'}
-                color={colors.darkGray}
-                size={20}
-              />
-              <View style={{paddingStart: 8}}>
-                <Text style={styles.documentItemTitleText}>{'Attachments'}</Text>
-              </View>
-            </View>
-            <FlatList
-              listKey={JSON.stringify(item.Attachments)}
-              data={item.Attachments}
-              renderItem={({item}) => <Text style={styles.documentItemVersionText}>{item}</Text>}
-              keyExtractor={(item, index) => `${item}-${index}`}
-              ItemSeparatorComponent={() => <View style={{height: 8}}/>}
-              ListHeaderComponent={() => <View style={{height: 8}}/>}
-            />
-          </View>
+          <TextList 
+            title={'Contributors'}
+            iconName={'account-group-outline'}
+            data={item.Contributors}
+            textProp={'Name'}
+            keyProp={'ID'}
+            listMargin={8}
+          />
+          <TextList 
+            title={'Attachments'}
+            iconName={'link-variant'}
+            data={item.Attachments}
+            listMargin={8}
+          />
         </View>   
       )}
     </Card>
