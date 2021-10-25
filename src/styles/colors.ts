@@ -18,6 +18,7 @@ const colors = {
   // Plain
   black: '#000000',
   white: '#FFFFFF',
+  darkGray: '#6B7380',
 };
 
 export default colors;
