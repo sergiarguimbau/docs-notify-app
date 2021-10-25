@@ -2,7 +2,7 @@ import 'react-native';
 import React from 'react';
 import App from '../App';
 import MainView from '../src/modules/main/MainView';
-import { Toolbar, Card, TextList } from '../src/components';
+import { Toolbar, Card, TextList, FooterButton } from '../src/components';
 
 // Note: test renderer must be required after react-native.
 import renderer from 'react-test-renderer';
@@ -25,4 +25,8 @@ it('Card component renders correctly', () => {
 
 it('TextList component renders correctly', () => {
   renderer.create(<TextList />);
+});
+
+it('FooterButton component renders correctly', () => {
+  renderer.create(<FooterButton title={'Test'}/>);
 });
