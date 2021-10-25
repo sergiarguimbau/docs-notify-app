@@ -7,6 +7,7 @@ const colors = {
   // Texts
   textDark: '#000000',
   textLight: '#FFFFFF',
+  textGray: '#6B7380',
 
   // Backgrounds
   backgroundLight: '#F4F4F6',
@@ -17,6 +18,7 @@ const colors = {
   // Plain
   black: '#000000',
   white: '#FFFFFF',
+  darkGray: '#6B7380',
 };
 
 export default colors;

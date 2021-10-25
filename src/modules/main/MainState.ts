@@ -55,11 +55,16 @@ export function fetchDocumentsData() {
 }
 
 // Helper functions
+const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
+
+const randomNumber = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
+
 const getResponseDocumentsAPI = async () => {
   try {
     // Insecure HTTP server running on local dev machine
     // Android -> @see https://reactnative.dev/docs/integration-with-existing-apps#cleartext-traffic-api-level-28
     // iOS -> @see https://reactnative.dev/docs/integration-with-existing-apps#1-add-app-transport-security-exception
+    await delay(randomNumber(200, 2000)); // Simulate network delay
     const response = await fetch(`http://${backendServer}/documents`);
     const json = await response.json();
     return json;
