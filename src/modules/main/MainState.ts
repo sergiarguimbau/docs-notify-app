@@ -1,5 +1,5 @@
 import { AnyAction, Dispatch } from 'redux';
-import { DocumentType } from '../../data/types';
+import { DocumentType, DocumentInfoType } from '../../data/types';
 import { initialDocumentsData } from '../../data/initialData';
 import { backendServer } from '../../data/global';
 
@@ -16,6 +16,7 @@ const initialState: MainState = {
 const FETCH_DOCUMENTS_DATA_START = 'MainState/FETCH_DOCUMENTS_DATA_START';
 const FETCH_DOCUMENTS_DATA_SUCCESS = 'MainState/FETCH_DOCUMENTS_DATA_SUCCESS';
 const FETCH_DOCUMENTS_DATA_FAILED = 'MainState/FETCH_DOCUMENTS_DATA_FAILED';
+const NEW_DOCUMENT_ADDED = 'MainState/NEW_DOCUMENT_ADDED';
 
 // Action creators
 export function fetchDocumentsDataStart(): AnyAction {
@@ -37,6 +38,13 @@ export function fetchDocumentsDataFailed(): AnyAction {
   };
 }
 
+export function newDocumentAdded(document: DocumentType): AnyAction {
+  return {
+    type: NEW_DOCUMENT_ADDED,
+    payload: { document },
+  };
+}
+
 // Dispatch functions
 export function fetchDocumentsData() {
   return async (dispatch: Dispatch) => {
@@ -51,6 +59,30 @@ export function fetchDocumentsData() {
     } else {
       dispatch(fetchDocumentsDataFailed());
     }
+  }
+}
+
+export function addDocument(documentInfo: DocumentInfoType) {
+  return (dispatch: Dispatch) => {
+    // Info is separated by commas
+    const attachments = documentInfo.documentAttachments.split(',').map(s => s.trim());
+    const contributors = documentInfo.documentContributors.split(',').map(s => {
+      return {ID: generateID(), Name: s.trim()};
+    });
+    const currentDate = new Date().toISOString();
+    
+    // Create document
+    const document: DocumentType = {
+      ID: generateID(),
+      Title: documentInfo.documentTitle,
+      Version: documentInfo.documentVersion,
+      Attachments: attachments,
+      Contributors: contributors,
+      CreatedAt: currentDate,
+      UpdatedAt: currentDate,
+    }
+
+    dispatch(newDocumentAdded(document));
   }
 }
 
@@ -73,6 +105,19 @@ const getResponseDocumentsAPI = async () => {
   }
 };
 
+const generateID = (): string => {
+  const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'; // alphanumeric characters
+  const blocks = [8, 4, 4, 4, 12]; // separated by dashes
+  let autoId = '';
+  blocks.forEach((block, index) => {
+    for (let i = 0; i < block; i++) {
+      autoId += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    if (index < blocks.length - 1) autoId += '-';
+  });
+  return autoId;
+}
+
 
 // Reducer
 export default function MainReducer(state: MainState = initialState, action: AnyAction) {
@@ -80,6 +125,10 @@ export default function MainReducer(state: MainState = initialState, action: Any
     case FETCH_DOCUMENTS_DATA_SUCCESS:
       return Object.assign({}, state, {
         documentsData: action.payload.documentsData,
+      });
+    case NEW_DOCUMENT_ADDED:
+      return Object.assign({}, state, {
+        documentsData: [action.payload.document, ...state.documentsData],
       });
     default:
       return state;

@@ -4,7 +4,8 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import MainView from './MainView';
-import { MainState, fetchDocumentsData } from './MainState';
+import { MainState, fetchDocumentsData, addDocument } from './MainState';
+import { DocumentInfoType } from '../../data/types';
 
 export default compose(
   connect(
@@ -13,6 +14,7 @@ export default compose(
     }),
     (dispatch: ThunkDispatch<MainState, void, Action>) => ({
       fetchDocumentsData: () => dispatch(fetchDocumentsData()),
+      addDocument: (documentInfo: DocumentInfoType) => dispatch(addDocument(documentInfo)),
     }),
   ),
 )(MainView);

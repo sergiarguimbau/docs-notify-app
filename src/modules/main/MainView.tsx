@@ -9,18 +9,23 @@ import {
   ListRenderItem,
   Dimensions,
   TouchableWithoutFeedback,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
 import { Toolbar, Card, TextList, FooterButton } from '../../components';
 import { colors } from '../../styles';
-import { DocumentType } from '../../data/types'
+import { DocumentType, DocumentInfoType } from '../../data/types'
 
 export type MainProps = {
   children?: React.ReactNode;
   documentsData?: DocumentType[],
   fetchDocumentsData?: () => void;
+  addDocument?: (documentInfo: DocumentInfoType) => void;
 };
 
 const MainView = (props: MainProps) => { 
@@ -32,11 +37,33 @@ const MainView = (props: MainProps) => {
 
   const [listMode, setListMode] = useState(LIST_MODE.LIST);
   const [isRefreshingDocuments, setIsRefreshingDocuments] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [documentTitle, setDocumentTitle] = useState('');
+  const [documentVersion, setDocumentVersion] = useState('');
+  const [documentContributors, setDocumentContributors] = useState('');
+  const [documentAttachments, setDocumentAttachments] = useState('');
 
   const onRefreshDocuments = async () => {
     setIsRefreshingDocuments(true);
     await props.fetchDocumentsData?.();
     setIsRefreshingDocuments(false);
+  }
+
+  const onSubmit = () => {
+    // Validate form
+    if (documentTitle.trim() && documentVersion.trim() && documentContributors.trim() && documentAttachments.trim()) {
+      const documentInfo: DocumentInfoType = {documentTitle, documentVersion, documentContributors, documentAttachments};
+      props.addDocument?.(documentInfo);
+      setIsModalVisible(false);
+
+      // Reset form
+      setDocumentTitle('');
+      setDocumentVersion('');
+      setDocumentContributors('');
+      setDocumentAttachments('');
+    } else {
+      Alert.alert('Document incomplete', 'Please fill all the required fields');
+    }
   }
   
   const LIST_MARGIN = 16;
@@ -142,8 +169,82 @@ const MainView = (props: MainProps) => {
         <FooterButton 
           title={'Add document'}
           iconName={'plus'}
+          onPress={() => setIsModalVisible(true)}
         />
       </View>
+      <Modal 
+        visible={isModalVisible} 
+        animationType={'slide'} 
+        transparent 
+        onRequestClose={() => setIsModalVisible(false)}
+      >
+        <View style={styles.modalBackdrop}>
+          <View style={styles.modalInner}>
+            <View style={styles.modalTitleTextContainer}>
+              <Text style={styles.modalTitleText}>{'Add document'}</Text>
+              <TouchableOpacity style={styles.modalIconContainer} onPress={() => setIsModalVisible(false)}>
+                <MaterialCommunityIcon
+                  name={'close'}
+                  color={colors.black}
+                  size={24}
+                />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.modalStandardTextContainer}>
+              <Text style={styles.modalStandardText}>{'Document informations'}</Text>
+            </View>
+            <View style={styles.modalStandardTextContainer}>
+              <Text style={styles.modalStandardText}>{'Name'}</Text>
+            </View>
+            <View style={styles.modalTextInputContainer}>
+              <TextInput 
+                style={styles.modalTextInput} 
+                placeholder={'My Document'}
+                value={documentTitle}
+                onChangeText={setDocumentTitle}
+              />
+            </View>
+            <View style={styles.modalStandardTextContainer}>
+              <Text style={styles.modalStandardText}>{'Version'}</Text>
+            </View>
+            <View style={styles.modalTextInputContainer}>
+              <TextInput 
+                style={styles.modalTextInput} 
+                placeholder={'1.0.0'} 
+                value={documentVersion}
+                onChangeText={setDocumentVersion}
+              />
+            </View>
+            <View style={styles.modalStandardTextContainer}>
+              <Text style={styles.modalStandardText}>{'Contributors'}</Text>
+            </View>
+            <View style={styles.modalTextInputContainer}>
+              <TextInput 
+                style={styles.modalTextInput} 
+                placeholder={'Todd Kemmer, Emma Corwin…'} 
+                value={documentContributors}
+                onChangeText={setDocumentContributors}
+              />
+            </View>
+            <View style={styles.modalStandardTextContainer}>
+              <Text style={styles.modalStandardText}>{'Attachments'}</Text>
+            </View>
+            <View style={[styles.modalTextInputContainer]}>
+              <TextInput 
+                style={styles.modalTextInput} 
+                placeholder={'Stout, Irish Ale, Dark Lager…'} 
+                value={documentAttachments}
+                onChangeText={setDocumentAttachments}
+              />
+            </View>
+            <View style={styles.modalBottomSeparator} />
+            <FooterButton 
+              title={'Submit'}
+              onPress={onSubmit}
+            />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -223,6 +324,59 @@ const styles = StyleSheet.create({
     alignItems: 'center', 
     justifyContent: 'center', 
     borderRadius: 4,
+  },
+
+  // Modal
+  modalBackdrop: {
+    backgroundColor: colors.backgroundOverlay,
+    flex: 1,
+    position: 'absolute',
+    justifyContent: 'flex-end',
+    height: '100%',
+    width: '100%',
+  },
+  modalInner: {
+    backgroundColor: colors.white,
+    width: '100%',
+    borderTopLeftRadius: 8,
+    borderTopRightRadius: 8,
+  },
+  modalTitleTextContainer: {
+    paddingStart: 16, 
+    flexDirection: 'row', 
+    alignItems: 'center', 
+    justifyContent: 'space-between', 
+  },
+  modalTitleText: {
+    color: colors.textDark, 
+    fontSize: 20, 
+    fontWeight: 'bold'
+  },
+  modalIconContainer: {
+    padding: 16,
+  },
+  modalStandardTextContainer: {
+    paddingHorizontal: 16, 
+    paddingTop: 8,
+  },
+  modalStandardText: {
+    color: colors.textDark, 
+    fontSize: 14, 
+    fontWeight: 'bold'
+  },
+  modalTextInputContainer: {
+    paddingHorizontal: 16, 
+    paddingTop: 4, 
+    paddingBottom: 8,
+  },
+  modalTextInput: {
+    padding: 8,
+    borderRadius: 8,
+    borderWidth: 1, 
+    borderColor: colors.borderLight, 
+  },
+  modalBottomSeparator: {
+    height: 20,
   },
 });
 

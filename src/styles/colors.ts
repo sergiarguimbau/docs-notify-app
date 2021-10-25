@@ -11,6 +11,7 @@ const colors = {
 
   // Backgrounds
   backgroundLight: '#F4F4F6',
+  backgroundOverlay: '#00000077',
 
   // Borders
   borderLight: '#D0D5DB',
