@@ -52,6 +52,50 @@ const MainView = (props: MainProps) => {
           <Text style={styles.documentItemVersionText} numberOfLines={1}>{'Version ' + item.Version}</Text>
         </View>
       </View>
+      {(listMode === LIST_MODE.LIST) && (
+        <View style={styles.documentItemInfoListContainer}>
+          <View style={styles.flex}>
+            <View style={styles.row}>
+              <MaterialCommunityIcon
+                name={'account-group-outline'}
+                color={colors.darkGray}
+                size={20}
+              />
+              <View style={{paddingStart: 8}}>
+                <Text style={styles.documentItemTitleText}>{'Contributors'}</Text>
+              </View>
+            </View>
+            <FlatList
+              listKey={JSON.stringify(item.Contributors)}
+              data={item.Contributors}
+              renderItem={({item}) => <Text style={styles.documentItemVersionText}>{item.Name}</Text>}
+              keyExtractor={item => `${item.ID}`}
+              ItemSeparatorComponent={() => <View style={{height: 8}}/>}
+              ListHeaderComponent={() => <View style={{height: 8}}/>}
+            />
+          </View>
+          <View style={styles.flex}>
+            <View style={styles.row}>
+              <MaterialCommunityIcon
+                name={'link-variant'}
+                color={colors.darkGray}
+                size={20}
+              />
+              <View style={{paddingStart: 8}}>
+                <Text style={styles.documentItemTitleText}>{'Attachments'}</Text>
+              </View>
+            </View>
+            <FlatList
+              listKey={JSON.stringify(item.Attachments)}
+              data={item.Attachments}
+              renderItem={({item}) => <Text style={styles.documentItemVersionText}>{item}</Text>}
+              keyExtractor={(item, index) => `${item}-${index}`}
+              ItemSeparatorComponent={() => <View style={{height: 8}}/>}
+              ListHeaderComponent={() => <View style={{height: 8}}/>}
+            />
+          </View>
+        </View>   
+      )}
     </Card>
   );
 
@@ -134,6 +178,10 @@ const styles = StyleSheet.create({
   documentItemVersionText: {
     color: colors.textGray,
     fontSize: 12,
+  },
+  documentItemInfoListContainer: {
+    paddingTop: 8,
+    flexDirection: 'row', 
   },
 
   // List Tools
