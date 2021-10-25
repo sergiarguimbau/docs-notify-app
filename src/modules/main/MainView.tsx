@@ -13,7 +13,7 @@ import {
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
-import { Toolbar, Card, TextList } from '../../components';
+import { Toolbar, Card, TextList, FooterButton } from '../../components';
 import { colors } from '../../styles';
 import { DocumentType } from '../../data/types'
 
@@ -138,6 +138,10 @@ const MainView = (props: MainProps) => {
           contentContainerStyle={{padding: LIST_MARGIN}}
           ItemSeparatorComponent={() => <View style={{height: LIST_MARGIN}}/>}
           ListHeaderComponent={renderListToolsItem}
+        />
+        <FooterButton 
+          title={'Add document'}
+          iconName={'plus'}
         />
       </View>
     </SafeAreaView>
