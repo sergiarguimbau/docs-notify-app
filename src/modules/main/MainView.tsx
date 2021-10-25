@@ -11,6 +11,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Moment from 'moment';
 
 import { Toolbar, Card, TextList } from '../../components';
 import { colors } from '../../styles';
@@ -44,7 +45,7 @@ const MainView = (props: MainProps) => {
 
   const renderDocumentItem: ListRenderItem<DocumentType> = ({item}) => (
     <Card elevation={4} style={[styles.documentItemContainer, {width : cardWidth} ]}>
-      <View style={(listMode === LIST_MODE.LIST) ? styles.row : undefined}>
+      <View style={(listMode === LIST_MODE.LIST) ? {flexDirection: 'row'} : undefined}>
         <View style={styles.documentItemTitleContainer}>
           <Text style={styles.documentItemTitleText} numberOfLines={1}>{item.Title}</Text>
         </View>
@@ -70,6 +71,28 @@ const MainView = (props: MainProps) => {
           />
         </View>   
       )}
+      <View style={(listMode === LIST_MODE.LIST) ? styles.documentItemDatesContainer : undefined}>
+        <View style={styles.documentItemDateContainer}>
+          <MaterialCommunityIcon
+            name={'calendar-plus'}
+            color={colors.black}
+            size={16}
+          />
+          <View style={styles.documentItemDateTextContainer}>
+            <Text numberOfLines={1} style={styles.documentItemDateText}>{Moment(item.CreatedAt).fromNow()}</Text>
+          </View>
+        </View>
+        <View style={styles.documentItemDateContainer}>
+          <MaterialCommunityIcon
+            name={'update'}
+            color={colors.black}
+            size={16}
+          />
+          <View style={styles.documentItemDateTextContainer}>
+            <Text numberOfLines={1} style={styles.documentItemDateText}>{Moment(item.UpdatedAt).fromNow()}</Text>
+          </View>
+        </View>
+      </View>
     </Card>
   );
 
@@ -122,6 +145,8 @@ const MainView = (props: MainProps) => {
 };
 
 const styles = StyleSheet.create({
+
+  // Main
   appContainer: {
     flex: 1,
   },
@@ -157,6 +182,22 @@ const styles = StyleSheet.create({
     paddingTop: 8,
     flexDirection: 'row', 
   },
+  documentItemDatesContainer: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  },
+  documentItemDateContainer: {
+    paddingTop: 8,
+    flexDirection: 'row', 
+    alignItems: 'center',
+  },
+  documentItemDateTextContainer: {
+    marginStart: 4,
+  },
+  documentItemDateText: {
+    color: colors.black,
+    fontSize: 11,
+  },
 
   // List Tools
   listToolsContainer: {
@@ -179,14 +220,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center', 
     borderRadius: 4,
   },
-
-  // Common
-  flex: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: 'row',
-  }
 });
 
 export default MainView;

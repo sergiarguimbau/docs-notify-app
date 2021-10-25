@@ -35,7 +35,7 @@ const TextList = (props: TextListProps) => {
 
   return (
     <View style={styles.textListMainContainer}>
-      <View style={styles.row}>
+      <View style={styles.textListIconTextContainer}>
         {props.iconName && (
           <MaterialCommunityIcon
             name={props.iconName}
@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
   textListMainContainer: {
     flex: 1,
   },
+  textListIconTextContainer: {
+    flexDirection: 'row',
+  },
   textListTitleTextContainer: {
     paddingStart: 8
   },
@@ -76,11 +79,6 @@ const styles = StyleSheet.create({
   textListItemText: {
     color: colors.textGray,
     fontSize: 13,
-  },
-
-  // Common
-  row: {
-    flexDirection: 'row',
   },
 });
 
