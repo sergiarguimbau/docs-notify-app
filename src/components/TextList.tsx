@@ -30,7 +30,7 @@ const TextList = (props: TextListProps) => {
   const renderItemSeparator = () => <View style={{height: LIST_MARGIN}} />
 
   const renderItemText: ListRenderItem<any> = ({item}) => (
-    <Text style={styles.textListItemText}>{props.textProp ? item[props.textProp] : item}</Text>
+    <Text style={styles.textListItemText} numberOfLines={1}>{props.textProp ? item[props.textProp] : item}</Text>
   );
 
   return (

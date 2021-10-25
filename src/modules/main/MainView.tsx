@@ -12,18 +12,20 @@ import {
   Modal,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Moment from 'moment';
 
 import { Toolbar, Card, TextList, FooterButton } from '../../components';
 import { colors } from '../../styles';
-import { DocumentType } from '../../data/types'
+import { DocumentType, DocumentInfoType } from '../../data/types'
 
 export type MainProps = {
   children?: React.ReactNode;
   documentsData?: DocumentType[],
   fetchDocumentsData?: () => void;
+  addDocument?: (documentInfo: DocumentInfoType) => void;
 };
 
 const MainView = (props: MainProps) => { 
@@ -45,6 +47,23 @@ const MainView = (props: MainProps) => {
     setIsRefreshingDocuments(true);
     await props.fetchDocumentsData?.();
     setIsRefreshingDocuments(false);
+  }
+
+  const onSubmit = () => {
+    // Validate form
+    if (documentTitle.trim() && documentVersion.trim() && documentContributors.trim() && documentAttachments.trim()) {
+      const documentInfo: DocumentInfoType = {documentTitle, documentVersion, documentContributors, documentAttachments};
+      props.addDocument?.(documentInfo);
+      setIsModalVisible(false);
+
+      // Reset form
+      setDocumentTitle('');
+      setDocumentVersion('');
+      setDocumentContributors('');
+      setDocumentAttachments('');
+    } else {
+      Alert.alert('Document incomplete', 'Please fill all the required fields');
+    }
   }
   
   const LIST_MARGIN = 16;
@@ -221,7 +240,7 @@ const MainView = (props: MainProps) => {
             <View style={styles.modalBottomSeparator} />
             <FooterButton 
               title={'Submit'}
-              onPress={() => setIsModalVisible(false)}
+              onPress={onSubmit}
             />
           </View>
         </View>
