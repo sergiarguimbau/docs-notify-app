@@ -20,3 +20,11 @@ export type DocumentInfoType = {
   documentAttachments: string,
 };
 
+export type NotificationType = {
+  DocumentID: string,
+  DocumentTitle: string,
+  UserID: string,
+  UserName: string,
+  Timestamp: string,
+}
+
