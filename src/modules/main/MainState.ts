@@ -6,10 +6,12 @@ import { backendServer } from '../../data/global';
 // Initial state
 export type MainState = {
   readonly documentsData: DocumentType[];
+  readonly numNotifications: number,
 };
 
 const initialState: MainState = {
   documentsData: initialDocumentsData,
+  numNotifications: 0,
 };
 
 // Actions
@@ -17,6 +19,8 @@ const FETCH_DOCUMENTS_DATA_START = 'MainState/FETCH_DOCUMENTS_DATA_START';
 const FETCH_DOCUMENTS_DATA_SUCCESS = 'MainState/FETCH_DOCUMENTS_DATA_SUCCESS';
 const FETCH_DOCUMENTS_DATA_FAILED = 'MainState/FETCH_DOCUMENTS_DATA_FAILED';
 const NEW_DOCUMENT_ADDED = 'MainState/NEW_DOCUMENT_ADDED';
+const NEW_NOTIFICATION_RECEIVED = 'MainState/NEW_NOTIFICATION_RECEIVED';
+const CLEAR_ALL_NOTIFICATIONS = 'MainState/CLEAR_ALL_NOTIFICATIONS';
 
 // Action creators
 export function fetchDocumentsDataStart(): AnyAction {
@@ -43,6 +47,18 @@ export function newDocumentAdded(document: DocumentType): AnyAction {
     type: NEW_DOCUMENT_ADDED,
     payload: { document },
   };
+}
+
+export function newNotificationReceived(): AnyAction {
+  return {
+    type: NEW_NOTIFICATION_RECEIVED,
+  }
+}
+
+export function clearAllNotifications(): AnyAction {
+  return {
+    type: CLEAR_ALL_NOTIFICATIONS,
+  }
 }
 
 // Dispatch functions
@@ -83,6 +99,34 @@ export function addDocument(documentInfo: DocumentInfoType) {
     }
 
     dispatch(newDocumentAdded(document));
+  }
+}
+
+export function receiveNotifications() {
+  return (dispatch: Dispatch) => {
+
+    // Connect WebSocket to receive notifications
+    // @see https://reactnative.dev/docs/network#websocket-support
+    const ws = new WebSocket(`ws://${backendServer}/notifications`);
+
+    ws.onopen = () => {
+      // connection opened
+    };
+
+    ws.onmessage = (e) => {
+      // a message was received
+      console.log(e.data);
+      dispatch(newNotificationReceived());
+    };
+
+    ws.onerror = (e) => {
+      // an error occurred
+      console.warn(e.message);
+    };
+
+    ws.onclose = (e) => {
+      // connection closed
+    };
   }
 }
 
@@ -129,6 +173,14 @@ export default function MainReducer(state: MainState = initialState, action: Any
     case NEW_DOCUMENT_ADDED:
       return Object.assign({}, state, {
         documentsData: [action.payload.document, ...state.documentsData],
+      });
+    case NEW_NOTIFICATION_RECEIVED:
+      return Object.assign({}, state, {
+        numNotifications: state.numNotifications + 1,
+      });
+    case CLEAR_ALL_NOTIFICATIONS:
+      return Object.assign({}, state, {
+        numNotifications: 0,
       });
     default:
       return state;

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   View,
@@ -24,8 +24,11 @@ import { DocumentType, DocumentInfoType } from '../../data/types'
 export type MainProps = {
   children?: React.ReactNode;
   documentsData?: DocumentType[],
+  numNotifications?: number,
   fetchDocumentsData?: () => void;
   addDocument?: (documentInfo: DocumentInfoType) => void;
+  receiveNotifications?: () => void;
+  clearAllNotifications?: () => void;
 };
 
 const MainView = (props: MainProps) => { 
@@ -42,6 +45,11 @@ const MainView = (props: MainProps) => {
   const [documentVersion, setDocumentVersion] = useState('');
   const [documentContributors, setDocumentContributors] = useState('');
   const [documentAttachments, setDocumentAttachments] = useState('');
+
+  useEffect(() => {
+    // Connect to the endpoint that receives notifications
+    props.receiveNotifications?.();
+  },[])
 
   const onRefreshDocuments = async () => {
     setIsRefreshingDocuments(true);
@@ -151,7 +159,7 @@ const MainView = (props: MainProps) => {
   return (
     <SafeAreaView style={styles.appContainer}>
       <StatusBar barStyle='dark-content' backgroundColor={colors.primary}/>
-      <Toolbar title={'Documents'} iconName={'bell-outline'} />
+      <Toolbar title={'Documents'} iconName={'bell-outline'} iconBubbleNumber={props.numNotifications} onPressIcon={() => props.clearAllNotifications?.()} />
       <View style={styles.screenContainer}> 
         <FlatList
           key={listMode}
