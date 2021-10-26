@@ -1,7 +1,8 @@
 import { AnyAction, Dispatch } from 'redux';
-import { DocumentType, DocumentInfoType } from '../../data/types';
+import { DocumentType, DocumentInfoType, NotificationType } from '../../data/types';
 import { initialDocumentsData } from '../../data/initialData';
 import { backendServer } from '../../data/global';
+import Notifications from '../../services/Notifications';
 
 // Initial state
 export type MainState = {
@@ -110,22 +111,28 @@ export function receiveNotifications() {
     const ws = new WebSocket(`ws://${backendServer}/notifications`);
 
     ws.onopen = () => {
-      // connection opened
+      // websocket connection opened
     };
 
     ws.onmessage = (e) => {
-      // a message was received
-      console.log(e.data);
+      // websocket message received
       dispatch(newNotificationReceived());
+
+      // Convert string to object
+      const receivedMessage: string = e.data;
+      const notification: NotificationType = JSON.parse(receivedMessage);
+
+      // Send local push notification
+      Notifications.sendNotification(notification);
     };
 
     ws.onerror = (e) => {
-      // an error occurred
-      console.warn(e.message);
+      // websocket error occurred
+      console.warn('Websocket error:', e.message);
     };
 
     ws.onclose = (e) => {
-      // connection closed
+      // websocket connection closed
     };
   }
 }
